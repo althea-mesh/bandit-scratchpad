@@ -8,10 +8,13 @@
     "plotter": "^0.5.0"
   },
   "devDependencies": {
-    "standard": "^10.0.2"
+    "flow-bin": "^0.46.0",
+    "flow-remove-types": "^1.2.1",
+    "standard": "^10.0.2",
+    "standard-flow": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./node_modules/.bin/flow-remove-types src/ -d lib/ && node lib/index.js"
   },
   "author": "",
   "license": "ISC"
