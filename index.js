@@ -76,26 +76,34 @@ const arms = [
   { reward: 0.9, trials: [], n: 0 }
 ]
 
-const gamma = 0.1
+const gamma = 0.01
 const window = 16
 
 for (let i = 0; i < 1000; i++) {
+  if (i === 250) {
+    arms.push({ reward: 0.5, trials: [], n: 0 })
+    arms.push({ reward: 0.99, trials: [], n: 0 })
+  }
   if (i === 500) {
     arms[0].reward = 0.8
   }
-  if (i === 750) {
-    arms.push({ reward: 0.5, trials: [], n: 0 })
+  if (i === 650) {
+    arms[1].reward = 0
+    arms[2].reward = 0
+  }
+  if (i === 800) {
+    arms[1].reward = 0.9
+    arms[2].reward = 0.9
   }
   const { arm, probability } = chooseArm(gamma, arms)
   const reward = arm.reward
-  arm.n++
   updateArm(window, arm, { reward, probability })
 }
 
-const data = log.reduce((acc, row) => {
-  row.forEach((item, i) => {
-    if (!acc[i]) { acc[i] = [] }
-    acc[i].push(item)
+const data = log.reduce((acc, row, i) => {
+  row.forEach((item, j) => {
+    if (!acc[j]) { acc[j] = {} }
+    acc[j][i] = item
   })
   return acc
 }, {})
