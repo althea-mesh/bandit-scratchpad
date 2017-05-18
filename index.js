@@ -2,7 +2,7 @@
 /* ::
 
 type Arm = {
-  reward: number,
+  reward: any,
   trials: Trial[],
   n: number
 }
@@ -15,6 +15,7 @@ type Trial = {
 */
 const { select } = require('weighted')
 const { plot } = require('plotter')
+const gaussian = require('gaussian')
 
 const log = []
 
@@ -68,12 +69,12 @@ function updateArm (
 }
 
 const arms = [
-  { reward: 0.9, trials: [], n: 0 },
-  { reward: 0.9, trials: [], n: 0 },
-  { reward: 0.9, trials: [], n: 0 },
-  { reward: 0.9, trials: [], n: 0 },
-  { reward: 0.9, trials: [], n: 0 },
-  { reward: 0.9, trials: [], n: 0 }
+  { reward: gaussian(0.9, 0.1), trials: [], n: 0 },
+  { reward: gaussian(0.9, 0.1), trials: [], n: 0 },
+  { reward: gaussian(0.9, 0.1), trials: [], n: 0 },
+  { reward: gaussian(0.9, 0.1), trials: [], n: 0 },
+  { reward: gaussian(0.9, 0.1), trials: [], n: 0 },
+  { reward: gaussian(0.9, 0.1), trials: [], n: 0 }
 ]
 
 const gamma = 0.01
@@ -81,22 +82,21 @@ const window = 16
 
 for (let i = 0; i < 1000; i++) {
   if (i === 250) {
-    arms.push({ reward: 0.5, trials: [], n: 0 })
-    arms.push({ reward: 0.99, trials: [], n: 0 })
+    arms.push({ reward: gaussian(0.5, 0.1), trials: [], n: 0 })
+    arms.push({ reward: gaussian(0.9, 0.1), trials: [], n: 0 })
   }
   if (i === 500) {
-    arms[0].reward = 0.8
+    arms[0].reward = gaussian(0.8, 0.1)
   }
   if (i === 650) {
-    arms[1].reward = 0
-    arms[2].reward = 0
+    arms[1].reward = gaussian(0, 0.1)
+    arms[2].reward = gaussian(0, 0.1)
   }
   if (i === 800) {
-    arms[1].reward = 0.9
-    arms[2].reward = 0.9
+    arms[1].reward = gaussian(0.9, 0.1)
   }
   const { arm, probability } = chooseArm(gamma, arms)
-  const reward = arm.reward
+  const reward = Math.max(0, arm.reward.ppf(Math.random()))
   updateArm(window, arm, { reward, probability })
 }
 
