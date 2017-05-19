@@ -49,7 +49,8 @@ function chooseArm (
   const K = arms.length
   const weights = arms.map(arm => getWeight(gamma, arm.trials, K))
   const probabilities = getProbabilities(weights)
-  log.push(weights)
+  log.push(probabilities.map(p => p * K))
+  // log.push(weights)
   const i = Number(select(arrToObj(probabilities)))
 
   return { arm: arms[i], probability: probabilities[i] }
