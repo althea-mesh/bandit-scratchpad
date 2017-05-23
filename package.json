@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "gaussian": "^1.1.0",
+    "lodash": "^4.17.4",
     "plotter": "^0.5.0",
     "weighted": "^0.3.0"
   },
@@ -15,7 +16,7 @@
     "standard-flow": "^1.0.0"
   },
   "scripts": {
-    "start": "./node_modules/.bin/flow-remove-types src/ -d lib/ && node lib/index.js"
+    "start": "./src/index.js"
   },
   "author": "",
   "license": "ISC"
